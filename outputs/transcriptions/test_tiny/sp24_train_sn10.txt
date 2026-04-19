@@ -1,0 +1,3 @@
+TEXT: A crew has been warm waters in a sleek yacht and fun.
+CONFIDENCE: 0.5114607236012472
+LATENCY: 1.497s

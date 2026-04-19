@@ -1,0 +1,3 @@
+TEXT: The line where the edges join was clean.
+CONFIDENCE: 0.622870673658547
+LATENCY: 8.994s

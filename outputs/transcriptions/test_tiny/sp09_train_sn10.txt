@@ -1,0 +1,3 @@
+TEXT: hurdles of tip with the aid of a long fold.
+CONFIDENCE: 0.5366646736343248
+LATENCY: 1.171s

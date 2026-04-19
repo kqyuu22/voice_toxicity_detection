@@ -1,0 +1,3 @@
+TEXT: The club rented the rink for the fifth night.
+CONFIDENCE: 0.721301791268544
+LATENCY: 8.869s

@@ -1,0 +1,3 @@
+TEXT: hedge apples may stain your hands green.
+CONFIDENCE: 0.6259780791667497
+LATENCY: 24.444s

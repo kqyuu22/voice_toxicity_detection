@@ -1,0 +1,3 @@
+TEXT: we find joy in the simplest thing.
+CONFIDENCE: 0.637663349924425
+LATENCY: 7.891s

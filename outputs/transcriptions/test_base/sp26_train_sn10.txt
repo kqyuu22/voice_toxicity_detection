@@ -1,0 +1,3 @@
+TEXT: She has a smart way of wearing clothes.
+CONFIDENCE: 0.7005181403388968
+LATENCY: 2.488s

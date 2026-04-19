@@ -1,0 +1,3 @@
+TEXT: A good buck informs us what we ought to know.
+CONFIDENCE: 0.7330777712304228
+LATENCY: 8.595s

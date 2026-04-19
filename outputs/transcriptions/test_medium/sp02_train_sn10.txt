@@ -1,0 +1,3 @@
+TEXT: He knew the skill of the great young actor.
+CONFIDENCE: 0.707530463768181
+LATENCY: 29.163s

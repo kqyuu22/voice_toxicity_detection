@@ -1,0 +1,3 @@
+TEXT: Men strive, but seldom get rich.
+CONFIDENCE: 0.6961527366828698
+LATENCY: 28.983s

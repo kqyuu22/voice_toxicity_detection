@@ -1,0 +1,3 @@
+TEXT: Clams are small, round, soft, and tasty.
+CONFIDENCE: 0.45794200669129803
+LATENCY: 1.800s

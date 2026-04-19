@@ -1,0 +1,3 @@
+TEXT: He wrote down a long list of items.
+CONFIDENCE: 0.736291384052143
+LATENCY: 21.074s

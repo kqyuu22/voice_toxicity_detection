@@ -1,0 +1,3 @@
+TEXT: It's the better time I hit the floor with a pass.
+CONFIDENCE: 0.4888732387423324
+LATENCY: 2.943s

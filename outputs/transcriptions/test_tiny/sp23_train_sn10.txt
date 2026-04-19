@@ -1,0 +1,3 @@
+TEXT: Stop whistling and watch the boys march.
+CONFIDENCE: 0.5345669450492727
+LATENCY: 1.226s

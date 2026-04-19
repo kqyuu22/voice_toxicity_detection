@@ -1,0 +1,3 @@
+TEXT: We find joy in the simplest scene.
+CONFIDENCE: 0.5678601633419972
+LATENCY: 1.096s

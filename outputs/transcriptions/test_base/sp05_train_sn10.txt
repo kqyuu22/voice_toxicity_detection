@@ -1,0 +1,3 @@
+TEXT: Wipes degrees, softly dirty face.
+CONFIDENCE: 0.3281329117326098
+LATENCY: 2.864s

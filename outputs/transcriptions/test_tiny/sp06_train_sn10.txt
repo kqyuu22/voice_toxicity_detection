@@ -1,0 +1,3 @@
+TEXT: and strive, but seldom get rich.
+CONFIDENCE: 0.4610487448479953
+LATENCY: 1.073s

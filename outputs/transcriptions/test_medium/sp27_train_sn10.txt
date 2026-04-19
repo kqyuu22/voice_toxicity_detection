@@ -1,0 +1,3 @@
+TEXT: Bring your best compass to the third class.
+CONFIDENCE: 0.7179552757204641
+LATENCY: 24.184s

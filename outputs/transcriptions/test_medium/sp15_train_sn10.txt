@@ -1,0 +1,3 @@
+TEXT: The clothes dried on a thin wooden rack.
+CONFIDENCE: 0.7255344260518914
+LATENCY: 24.590s

@@ -1,0 +1,3 @@
+TEXT: He births the news, led on a smooth plank.
+CONFIDENCE: 0.40298115351442326
+LATENCY: 11.278s

@@ -1,0 +1,3 @@
+TEXT: Smoke poured out of every crack.
+CONFIDENCE: 0.5808039479108763
+LATENCY: 7.321s

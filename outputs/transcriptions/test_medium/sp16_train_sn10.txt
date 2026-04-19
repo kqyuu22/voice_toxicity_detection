@@ -1,0 +1,3 @@
+TEXT: The stray cat gave birth to the kitten.
+CONFIDENCE: 0.5575754840492153
+LATENCY: 25.392s

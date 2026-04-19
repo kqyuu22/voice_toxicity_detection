@@ -1,0 +1,3 @@
+TEXT: So lazy cow, lay in the cool grass.
+CONFIDENCE: 0.5605323945063949
+LATENCY: 3.085s

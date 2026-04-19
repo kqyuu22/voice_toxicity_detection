@@ -1,0 +1,3 @@
+TEXT: No court out of a big crack.
+CONFIDENCE: 0.44111031338661005
+LATENCY: 1.935s

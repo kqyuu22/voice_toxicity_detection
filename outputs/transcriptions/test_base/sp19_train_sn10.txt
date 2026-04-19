@@ -1,0 +1,3 @@
+TEXT: We've talked to the fight show in the first.
+CONFIDENCE: 0.4276510759138309
+LATENCY: 2.988s

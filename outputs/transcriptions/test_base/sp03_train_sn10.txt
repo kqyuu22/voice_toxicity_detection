@@ -1,0 +1,3 @@
+TEXT: The first was full of youthful stress.
+CONFIDENCE: 0.470871178528894
+LATENCY: 2.466s

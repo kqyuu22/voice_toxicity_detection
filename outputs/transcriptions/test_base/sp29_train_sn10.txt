@@ -1,0 +1,3 @@
+TEXT: the flint cluttered and lit a pine forest.
+CONFIDENCE: 0.5684272138218331
+LATENCY: 3.144s

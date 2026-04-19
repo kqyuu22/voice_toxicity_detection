@@ -1,0 +1,3 @@
+TEXT: Hurdle the pit with the aid of a long pole.
+CONFIDENCE: 0.7425122203831714
+LATENCY: 24.790s

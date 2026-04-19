@@ -1,0 +1,3 @@
+TEXT: Read verse out loud for pleasure.
+CONFIDENCE: 0.6925840754314948
+LATENCY: 24.731s

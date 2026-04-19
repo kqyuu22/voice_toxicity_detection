@@ -1,0 +1,3 @@
+TEXT: A cruise in warm waters in a sleek yacht is fun.
+CONFIDENCE: 0.6754604400456683
+LATENCY: 9.105s

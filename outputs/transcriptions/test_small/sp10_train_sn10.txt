@@ -1,0 +1,3 @@
+TEXT: The sky that morning was clear and bright blue.
+CONFIDENCE: 0.751457439365676
+LATENCY: 8.477s

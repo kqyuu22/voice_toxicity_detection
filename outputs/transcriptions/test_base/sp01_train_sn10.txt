@@ -1,0 +1,3 @@
+TEXT: You both can use the lid on the smooth plank.
+CONFIDENCE: 0.4807467174841574
+LATENCY: 3.209s

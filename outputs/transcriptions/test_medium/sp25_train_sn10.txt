@@ -1,0 +1,3 @@
+TEXT: A good book informs of what we ought to know.
+CONFIDENCE: 0.7385625645508982
+LATENCY: 25.281s

@@ -1,0 +1,3 @@
+TEXT: Pass a wand to tea and not to dinner.
+CONFIDENCE: 0.5686624808452869
+LATENCY: 25.869s

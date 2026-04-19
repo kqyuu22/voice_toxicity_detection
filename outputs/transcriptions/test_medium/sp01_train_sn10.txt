@@ -1,0 +1,3 @@
+TEXT: The birch canoes slid on a smooth plank.
+CONFIDENCE: 0.6200819487279278
+LATENCY: 41.203s

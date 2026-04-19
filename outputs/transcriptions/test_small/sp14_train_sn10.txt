@@ -1,0 +1,3 @@
+TEXT: has a one to key and not to do not.
+CONFIDENCE: 0.5014381265198251
+LATENCY: 8.220s

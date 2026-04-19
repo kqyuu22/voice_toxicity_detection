@@ -1,0 +1,3 @@
+TEXT: Half of 1 to 2 and not to do no.
+CONFIDENCE: 0.42477057621422415
+LATENCY: 2.784s

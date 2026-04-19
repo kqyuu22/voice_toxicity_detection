@@ -1,0 +1,3 @@
+TEXT: has a warrant to key and not to deny.
+CONFIDENCE: 0.39300510743475375
+LATENCY: 1.795s

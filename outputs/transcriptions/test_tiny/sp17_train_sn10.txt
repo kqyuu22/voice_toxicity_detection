@@ -1,0 +1,3 @@
+TEXT: so leave me tell me in the cool bag.
+CONFIDENCE: 0.4244561803617451
+LATENCY: 1.313s

@@ -1,0 +1,3 @@
+TEXT: We talked of the side show in the circus.
+CONFIDENCE: 0.5263201349689693
+LATENCY: 24.768s

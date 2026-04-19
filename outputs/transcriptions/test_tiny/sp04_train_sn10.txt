@@ -1,0 +1,3 @@
+TEXT: Reverse out loud for pleasure.
+CONFIDENCE: 0.4942559133080837
+LATENCY: 1.083s

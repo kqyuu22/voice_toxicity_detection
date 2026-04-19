@@ -1,0 +1,3 @@
+TEXT: It's the straight path to your first technique.
+CONFIDENCE: 0.3831334436781747
+LATENCY: 2.927s

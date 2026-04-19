@@ -1,0 +1,3 @@
+TEXT: Wipe the grease off his dirty face.
+CONFIDENCE: 0.7284215121327552
+LATENCY: 31.089s

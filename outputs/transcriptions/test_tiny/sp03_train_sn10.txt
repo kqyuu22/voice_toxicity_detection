@@ -1,0 +1,3 @@
+TEXT: The first is full of you for scratch.
+CONFIDENCE: 0.5044662154250346
+LATENCY: 0.975s

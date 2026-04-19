@@ -1,0 +1,3 @@
+TEXT: The straight hat to your first hit.
+CONFIDENCE: 0.48264213616228624
+LATENCY: 1.133s

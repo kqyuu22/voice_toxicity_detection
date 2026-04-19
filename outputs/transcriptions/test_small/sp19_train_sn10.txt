@@ -1,0 +1,3 @@
+TEXT: We tossed the slide show in the search.
+CONFIDENCE: 0.4574516765514276
+LATENCY: 7.985s

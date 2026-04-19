@@ -1,0 +1,3 @@
+TEXT: Head apples may stain your hand's green.
+CONFIDENCE: 0.4954921191990333
+LATENCY: 2.169s

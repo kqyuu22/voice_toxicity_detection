@@ -1,0 +1,3 @@
+TEXT: Let's all join as we sing the last chorus.
+CONFIDENCE: 0.7473674950096473
+LATENCY: 25.425s

@@ -1,0 +1,3 @@
+TEXT: We talk to the side, so in the start.
+CONFIDENCE: 0.40364839096911953
+LATENCY: 1.587s

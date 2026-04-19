@@ -1,0 +1,3 @@
+TEXT: The purse is full of useless trash.
+CONFIDENCE: 0.7206508304082119
+LATENCY: 25.013s

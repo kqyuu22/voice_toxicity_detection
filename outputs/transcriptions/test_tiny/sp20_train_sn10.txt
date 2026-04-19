@@ -1,0 +1,3 @@
+TEXT: to set a planet at the floor with a cat.
+CONFIDENCE: 0.5609506510699854
+LATENCY: 1.501s

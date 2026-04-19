@@ -1,0 +1,3 @@
+TEXT: hurtle the pit with the aid of a long fold
+CONFIDENCE: 0.5986766586908997
+LATENCY: 2.905s

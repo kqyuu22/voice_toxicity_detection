@@ -1,0 +1,3 @@
+TEXT: It's the stray cat who first hit me.
+CONFIDENCE: 0.49983516894541863
+LATENCY: 8.501s

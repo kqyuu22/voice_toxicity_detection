@@ -1,0 +1,3 @@
+TEXT: The drip of the rain made a pleasant sound.
+CONFIDENCE: 0.6546090957124645
+LATENCY: 2.344s

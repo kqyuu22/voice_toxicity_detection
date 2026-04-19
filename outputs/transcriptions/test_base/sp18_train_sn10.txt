@@ -1,0 +1,3 @@
+TEXT: The friendly game left the drugstore.
+CONFIDENCE: 0.5923871432689591
+LATENCY: 2.809s

@@ -1,0 +1,3 @@
+TEXT: Let's not join as we see in the last court.
+CONFIDENCE: 0.6594437318571557
+LATENCY: 2.130s
