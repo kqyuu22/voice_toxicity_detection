@@ -139,3 +139,4 @@ outputs/test_*/
 *.mp3
 *.zip
 legacy/
+toxic_model/model.safetensors

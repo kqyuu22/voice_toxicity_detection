@@ -5,7 +5,7 @@ from pathlib import Path
 
 def main():
     project_root = Path(__file__).resolve().parents[1]
-    classifier_script = project_root.parent / "Text_classification.py"
+    classifier_script = project_root / "Text_classification.py"
 
     command = [
         sys.executable,

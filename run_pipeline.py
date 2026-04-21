@@ -22,6 +22,25 @@ def run_step(name, command, cwd, timeout=None, continue_on_timeout=False):
         raise RuntimeError(f"{name} failed with exit code {completed.returncode}.")
 
 
+def ensure_venv_python(project_root):
+    venv_python = project_root / "venv" / "Scripts" / "python.exe"
+    if not venv_python.exists():
+        return
+
+    try:
+        using_venv_python = Path(sys.executable).resolve() == venv_python.resolve()
+    except OSError:
+        using_venv_python = False
+
+    if using_venv_python:
+        return
+
+    print(f"Using virtual environment interpreter: {venv_python}")
+    command = [str(venv_python), str(Path(__file__).resolve()), *sys.argv[1:]]
+    completed = subprocess.run(command, cwd=str(project_root))
+    sys.exit(completed.returncode)
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Run the audio recording, transcription, and toxicity prediction pipeline."
@@ -58,7 +77,8 @@ def parse_args():
 
 def main():
     args = parse_args()
-    project_root = Path(__file__).resolve().parents[1]
+    project_root = Path(__file__).resolve().parent
+    ensure_venv_python(project_root)
     src_dir = project_root / "src"
 
     try:

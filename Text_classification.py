@@ -48,7 +48,7 @@ torch.manual_seed(SEED)
 np.random.seed(SEED)
 
 PROJECT_ROOT = Path(__file__).resolve().parent
-TRANSCRIBER_PROJECT_ROOT = PROJECT_ROOT / "recorder_and_transcriber"
+TRANSCRIBER_PROJECT_ROOT = PROJECT_ROOT
 DEFAULT_TRANSCRIPTION_FILE = (
     TRANSCRIBER_PROJECT_ROOT / "outputs" / "audio" / "final_output_transcription.txt"
 )
@@ -70,7 +70,7 @@ CONFIG = {
 
     # Output
     "output_dir": str(PROJECT_ROOT / "toxic_classifier_output"),
-    "model_save_path": str(PROJECT_ROOT / "toxic_classifier_model"),
+    "model_save_path": str(PROJECT_ROOT / "toxic_model"),
 }
 
 TOXICITY_LABELS = [
@@ -285,18 +285,33 @@ def save_model(model, tokenizer):
 
 def load_saved_model():
     """Load a previously saved model and tokenizer from disk."""
-    save_path = CONFIG['model_save_path']
-    if not os.path.exists(save_path):
+    configured_path = Path(CONFIG['model_save_path'])
+    candidate_paths = [
+        configured_path,
+        PROJECT_ROOT / "toxic_classifier_model",
+        PROJECT_ROOT / "toxic_model",
+    ]
+
+    save_path = None
+    for candidate in candidate_paths:
+        if candidate.exists():
+            save_path = candidate
+            break
+
+    if save_path is None:
+        searched = "\n".join(f"- {path}" for path in candidate_paths)
         raise FileNotFoundError(
-            f"No saved model found at '{save_path}'. Run training first."
+            "No saved model directory found. Run training first or place model files in one of:\n"
+            f"{searched}"
         )
-    tokenizer = AutoTokenizer.from_pretrained(save_path)
-    model = AutoModelForSequenceClassification.from_pretrained(save_path)
+
+    tokenizer = AutoTokenizer.from_pretrained(str(save_path))
+    model = AutoModelForSequenceClassification.from_pretrained(str(save_path))
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model.to(device)
     model.eval()
     print(f"Using device: {device}")
-    print(f"✓ Model loaded from: {os.path.abspath(save_path)}")
+    print(f"✓ Model loaded from: {save_path.resolve()}")
     return model, tokenizer
 
 
@@ -419,10 +434,9 @@ def read_prediction_text(args):
             "Transcript file not found.\n"
             f"Expected: {file_path}\n"
             "Run the transcriber first, for example:\n"
-            "  cd recorder_and_transcriber\n"
             "  python src\\transcriber.py\n"
             "Then run predict again:\n"
-            "  python ..\\Text_classification.py predict"
+            "  python Text_classification.py predict"
         )
 
     text = file_path.read_text(encoding="utf-8").strip()

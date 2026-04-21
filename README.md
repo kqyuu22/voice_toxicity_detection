@@ -5,7 +5,7 @@ A project to experiment with recording audio with voice activity detection (VAD)
 ## Pipeline
 
 ```
-python src/run_pipeline.py    -> Runs threshold check, recording, transcription,
+python run_pipeline.py        -> Runs threshold check, recording, transcription,
                               -> and toxicity prediction in order
 
 Individual steps:
@@ -37,11 +37,12 @@ test/
 │   ├── recorder.py              # Record audio with VAD
 │   ├── transcriber.py           # Transcribe audio
 │   ├── predict_toxicity.py      # Predict toxicity from latest transcript
-│   ├── run_pipeline.py          # Run pipeline steps with one command
 │   ├── transcriber_test.py      # Test different models
 │   ├── threshold_testing.py     # Test VAD threshold
 │   ├── results_analysis.py      # Analyze WER
 │   └── result_visualization.py  # Generate charts
+│
+├── run_pipeline.py            # Run pipeline steps with one command
 │
 ├── data/
 │   ├── raw/10dB/                # Dataset (noizeus)
@@ -66,12 +67,12 @@ python ..\Text_classification.py train
 
 Then run the full audio-to-toxicity pipeline with one command:
 ```bash
-python src\run_pipeline.py
+python run_pipeline.py
 ```
 
 By default, this runs `threshold_testing.py` for 5 seconds, then `recorder.py`, `transcriber.py`, and `predict_toxicity.py`. To skip the threshold check:
 ```bash
-python src\run_pipeline.py --skip-threshold
+python run_pipeline.py --skip-threshold
 ```
 
 ### Recording
