@@ -53,6 +53,7 @@ def ensure_output_dirs():
 
 # Output file paths
 AUDIO_OUTPUT = OUTPUT_DIRS["audio"] / "final_output.wav"
+TRANSCRIPTION_OUTPUT = OUTPUT_DIRS["audio"] / "final_output_transcription.txt"
 PERF_SUMMARY_OUTPUT = OUTPUT_DIRS["visualizations"] / "performance_summary.png"
 FILE_BREAKDOWN_OUTPUT = OUTPUT_DIRS["visualizations"] / "file_breakdown.png"
 TRANSCRIPTIONS_OUTPUT = OUTPUT_DIRS["transcriptions"]
