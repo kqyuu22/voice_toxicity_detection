@@ -311,7 +311,7 @@ def load_saved_model():
     model.to(device)
     model.eval()
     print(f"Using device: {device}")
-    print(f"✓ Model loaded from: {save_path.resolve()}")
+    print(f"Model loaded from: {save_path.resolve()}")
     return model, tokenizer
 
 
@@ -590,6 +590,11 @@ def main():
     except PredictionInputError as exc:
         print(f"Prediction input error:\n{exc}", file=sys.stderr)
         sys.exit(1)
+    except Exception as exc:
+        if command == "predict":
+            print(f"Prediction error:\n{exc}", file=sys.stderr)
+            sys.exit(1)
+        raise
 
 
 if __name__ == "__main__":

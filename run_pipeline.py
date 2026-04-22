@@ -62,6 +62,12 @@ def parse_args():
         help="Only record and transcribe; do not run toxicity prediction.",
     )
     parser.add_argument(
+        "--record-timeout-seconds",
+        type=int,
+        default=120,
+        help="Maximum seconds to wait for recorder.py before failing.",
+    )
+    parser.add_argument(
         "--predict-threshold",
         type=float,
         default=None,
@@ -95,6 +101,7 @@ def main():
             name="Record audio",
             command=[sys.executable, str(src_dir / "recorder.py")],
             cwd=project_root,
+            timeout=args.record_timeout_seconds,
         )
 
         run_step(
