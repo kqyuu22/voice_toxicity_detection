@@ -62,7 +62,7 @@ Run these commands from `recorder_and_transcriber`.
 
 Train the toxicity classifier once before using `predict`:
 ```bash
-python ..\Text_classification.py train
+python Text_classification.py train
 ```
 
 Then run the full audio-to-toxicity pipeline with one command:
@@ -70,7 +70,7 @@ Then run the full audio-to-toxicity pipeline with one command:
 python run_pipeline.py
 ```
 
-By default, this runs `threshold_testing.py` for 5 seconds, then `recorder.py`, `transcriber.py`, and `predict_toxicity.py`. To skip the threshold check:
+By default, this runs `threshold_testing.py` for 5 seconds, then `recorder.py`, `transcriber.py`, and `predict_toxicity.py`. The recorder step times out after 120 seconds unless `--record-timeout-seconds` is changed. To skip the threshold check:
 ```bash
 python run_pipeline.py --skip-threshold
 ```
@@ -104,7 +104,7 @@ After `src/transcriber.py` has created `outputs/audio/final_output_transcription
 python src\predict_toxicity.py
 ```
 
-`predict` only loads the saved classifier from `..\toxic_classifier_model`; it does not train. If the default transcript file is missing or empty, it exits with a clear message asking you to run `python src\transcriber.py` again.
+`src\predict_toxicity.py` is a wrapper that calls `Text_classification.py predict` from the project root. `predict` only loads a saved classifier from `toxic_model` by default, with legacy fallback path `toxic_classifier_model`; it does not train. If the default transcript file is missing or empty, it exits with a clear message asking you to run `python src\transcriber.py` again.
 
 You can still classify a custom text file when needed:
 ```bash
