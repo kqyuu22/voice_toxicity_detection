@@ -69,8 +69,8 @@ CONFIG = {
     "test_size": 0.1,
 
     # Output
-    "output_dir": str(PROJECT_ROOT / "toxic_classifier_output"),
-    "model_save_path": str(PROJECT_ROOT / "toxic_model"),
+    "output_dir": r"G:\My Drive\DADN\toxic_classification_output",
+    "model_save_path": r"G:\My Drive\DADN\toxic_model",
 }
 
 TOXICITY_LABELS = [

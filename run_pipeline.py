@@ -86,6 +86,7 @@ def main():
     project_root = Path(__file__).resolve().parent
     ensure_venv_python(project_root)
     src_dir = project_root / "src"
+    fallback_flag = project_root / "outputs" / "audio" / "used_dataset_fallback.flag"
 
     try:
         if not args.skip_threshold and args.threshold_seconds > 0:
@@ -104,11 +105,19 @@ def main():
             timeout=args.record_timeout_seconds,
         )
 
-        run_step(
-            name="Transcribe audio",
-            command=[sys.executable, str(src_dir / "transcriber.py")],
-            cwd=project_root,
-        )
+        if fallback_flag.exists():
+            source = fallback_flag.read_text(encoding="utf-8", errors="ignore").strip()
+            print("\nRecorder timeout fallback was used.")
+            if source:
+                print(f"Fallback source: {source}")
+            print("Skipping transcription step and using prepared transcript output.")
+            fallback_flag.unlink()
+        else:
+            run_step(
+                name="Transcribe audio",
+                command=[sys.executable, str(src_dir / "transcriber.py")],
+                cwd=project_root,
+            )
 
         if not args.skip_predict:
             predict_command = [sys.executable, str(src_dir / "predict_toxicity.py")]
