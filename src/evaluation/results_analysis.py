@@ -5,8 +5,8 @@ import sys
 from pathlib import Path
 
 # Add parent directory to path to import config
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from config import REFERENCE_FILES, TRANSCRIPTIONS_OUTPUT, LEGACY_ROOT, ensure_output_dirs
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from config import REFERENCE_FILES, TRANSCRIPTIONS_OUTPUT, ANALYSIS_OUTPUT, ensure_output_dirs
 
 def normalize_text(text):
     """Lowercases, removes punctuation, and strips extra whitespace."""
@@ -36,7 +36,7 @@ def calculate_wer(reference, hypothesis):
     
     return d[len(ref_words)][len(hyp_words)] / len(ref_words) if len(ref_words) > 0 else 0
 
-def compare_transcriptions(ground_truth_path, folder_path):
+def compare_transcriptions(ground_truth_path, folder_path, output_file="analysis_results.txt"):
     ground_truth = {}
     try:
         with open(ground_truth_path, 'r') as f:
@@ -47,6 +47,12 @@ def compare_transcriptions(ground_truth_path, folder_path):
     except FileNotFoundError:
         print("Error: Ground truth file not found.")
         return
+    
+    # Write header for the output files
+    with open(ANALYSIS_OUTPUT / output_file, 'w') as f:
+        f.write(f"{'ID':<6} | {'Norm Match':<12} | {'WER (%)':<8} | {'Details'}\n")
+        f.write("-" * 75 + "\n")
+    
 
     print(f"{'ID':<6} | {'Norm Match':<12} | {'WER (%)':<8} | {'Details'}")
     print("-" * 75)
@@ -78,8 +84,17 @@ def compare_transcriptions(ground_truth_path, folder_path):
         total_wer += wer_score
         if is_match: match_count += 1
 
+        with open(ANALYSIS_OUTPUT / output_file, 'a') as f:
+            f.write(f"{sp_id:<6} | {'YES' if is_match else 'NO':<12} | {wer_score*100:>7.1f}% | {model_output[:30]}...\n")
+
         status = "YES" if is_match else "NO"
         print(f"{sp_id:<6} | {status:<12} | {wer_score*100:>7.1f}% | {model_output[:30]}...")
+
+    # Write summary to file
+    with open(ANALYSIS_OUTPUT / output_file, 'a') as f:
+        f.write("-" * 75 + "\n")
+        f.write(f"OVERALL ACCURACY (Normalized): {(match_count / len(ground_truth) * 100):.2f}%\n")
+        f.write(f"AVERAGE WORD ERROR RATE: {(total_wer / len(ground_truth) * 100):.2f}%\n")
 
     # Summary Analysis
     avg_wer = (total_wer / len(ground_truth)) * 100
@@ -91,8 +106,19 @@ def compare_transcriptions(ground_truth_path, folder_path):
 
 if __name__ == "__main__":
     ensure_output_dirs()
-    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT/"test_tiny"))
-    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT/"test_base"))
-    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT/"test_small"))
-    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT/"test_medium"))
-    # compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(LEGACY_ROOT/"enhanced_results")) # This is the old results from medium model
+    print("-" * 40)
+    print("Analyzing transcriptions for test_tiny...")
+    print("-" * 40)
+    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT / "test_tiny",), output_file="analysis_results_tiny.txt")
+    print("-" * 40)
+    print("Analyzing transcriptions for test_base...")
+    print("-" * 40)
+    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT / "test_base"), output_file="analysis_results_base.txt")
+    print("-" * 40)
+    print("Analyzing transcriptions for test_small...")
+    print("-" * 40)
+    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT / "test_small"), output_file="analysis_results_small.txt")
+    print("-" * 40)
+    print("Analyzing transcriptions for test_medium...")
+    print("-" * 40)
+    compare_transcriptions(str(REFERENCE_FILES["ground_truth"]), str(TRANSCRIPTIONS_OUTPUT / "test_medium"), output_file="analysis_results_medium.txt")

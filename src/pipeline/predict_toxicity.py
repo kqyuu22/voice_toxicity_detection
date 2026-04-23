@@ -4,8 +4,8 @@ from pathlib import Path
 
 
 def main():
-    project_root = Path(__file__).resolve().parents[1]
-    classifier_script = project_root / "Text_classification.py"
+    project_root = Path(__file__).resolve().parents[2]
+    classifier_script = project_root / "models" / "text_classification.py"
 
     command = [
         sys.executable,

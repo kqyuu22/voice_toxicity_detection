@@ -5,10 +5,10 @@ Train an XLM-RoBERTa model to classify toxic comments (multi-label).
 After training, the model is saved to disk for later reuse without retraining.
 
 Usage:
-    python Text_classification.py train
-    python Text_classification.py train --test
-    python Text_classification.py predict --text "hello, you loser."
-    python Text_classification.py predict --file recorder_and_transcriber/outputs/audio/final_output_transcription.txt
+    python models/text_classification.py train
+    python models/text_classification.py train --test
+    python models/text_classification.py predict --text "hello, you loser."
+    python models/text_classification.py predict --file recorder_and_transcriber/outputs/pipeline_results/recording_output_transcription.txt
 """
 
 import argparse
@@ -47,10 +47,10 @@ SEED = 42
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TRANSCRIBER_PROJECT_ROOT = PROJECT_ROOT
 DEFAULT_TRANSCRIPTION_FILE = (
-    TRANSCRIBER_PROJECT_ROOT / "outputs" / "audio" / "final_output_transcription.txt"
+    TRANSCRIBER_PROJECT_ROOT / "outputs" / "pipeline_results" / "recording_output_transcription.txt"
 )
 
 CONFIG = {
@@ -289,7 +289,7 @@ def load_saved_model():
     candidate_paths = [
         configured_path,
         PROJECT_ROOT / "toxic_classifier_model",
-        PROJECT_ROOT / "toxic_model",
+        PROJECT_ROOT / "models" / "toxic_model",
     ]
 
     save_path = None
@@ -434,9 +434,9 @@ def read_prediction_text(args):
             "Transcript file not found.\n"
             f"Expected: {file_path}\n"
             "Run the transcriber first, for example:\n"
-            "  python src\\transcriber.py\n"
+            "  python src\\pipeline\\transcriber.py\n"
             "Then run predict again:\n"
-            "  python Text_classification.py predict"
+            "  python models\\text_classification.py predict"
         )
 
     text = file_path.read_text(encoding="utf-8").strip()
@@ -557,7 +557,7 @@ def parse_args():
         "--file",
         help=(
             "Text file to classify. Defaults to "
-            "recorder_and_transcriber/outputs/audio/final_output_transcription.txt"
+            "recorder_and_transcriber/outputs/pipeline_results/recording_output_transcription.txt"
         ),
     )
     predict_parser.add_argument(

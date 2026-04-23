@@ -85,14 +85,15 @@ def main():
     args = parse_args()
     project_root = Path(__file__).resolve().parent
     ensure_venv_python(project_root)
-    src_dir = project_root / "src"
-    fallback_flag = project_root / "outputs" / "audio" / "used_dataset_fallback.flag"
+    pipeline_dir = project_root / "src" / "pipeline"
+    evaluation_dir = project_root / "src" / "evaluation"
+    fallback_flag = project_root / "outputs" / "pipeline_results" / "used_dataset_fallback.flag"
 
     try:
         if not args.skip_threshold and args.threshold_seconds > 0:
             run_step(
                 name="Threshold test",
-                command=[sys.executable, str(src_dir / "threshold_testing.py")],
+                command=[sys.executable, str(evaluation_dir / "threshold_testing.py")],
                 cwd=project_root,
                 timeout=args.threshold_seconds,
                 continue_on_timeout=True,
@@ -100,7 +101,7 @@ def main():
 
         run_step(
             name="Record audio",
-            command=[sys.executable, str(src_dir / "recorder.py")],
+            command=[sys.executable, str(pipeline_dir / "record.py")],
             cwd=project_root,
             timeout=args.record_timeout_seconds,
         )
@@ -115,12 +116,12 @@ def main():
         else:
             run_step(
                 name="Transcribe audio",
-                command=[sys.executable, str(src_dir / "transcriber.py")],
+                command=[sys.executable, str(pipeline_dir / "transcribe.py")],
                 cwd=project_root,
             )
 
         if not args.skip_predict:
-            predict_command = [sys.executable, str(src_dir / "predict_toxicity.py")]
+            predict_command = [sys.executable, str(pipeline_dir / "predict_toxicity.py")]
             if args.predict_threshold is not None:
                 predict_command.extend(["--threshold", str(args.predict_threshold)])
             if args.json:

@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 # Add parent directory to path to import config
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from config import (
     AUDIO_OUTPUT,
     TRANSCRIPTION_OUTPUT,
@@ -24,7 +24,7 @@ Note:
     + In quiet environments, you can set it around 0.04
     + In environments with fan noise, you might want to set it around 0.06
     + You can set the threshold higher, but you must speak louder and it may miss softer speech.
-- The silence limit is set to 2 seconds. If the sound drops below the threshold for 2 seconds, it will finish recording.
+- If the sound drops below the threshold for [silence_limit] seconds, it will finish recording.
 """
 
 class SingleShotRecorder:
