@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Add parent directory to path to import config
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from config import PERF_SUMMARY_OUTPUT, FILE_BREAKDOWN_OUTPUT, TRANSCRIPTIONS_OUTPUT, ensure_output_dirs
 
 def visualize_results(folder_path):
@@ -68,5 +68,7 @@ def visualize_results(folder_path):
     print(f"  - {FILE_BREAKDOWN_OUTPUT}")
 
 if __name__ == "__main__":
-    ensure_output_dirs()
-    visualize_results(str(TRANSCRIPTIONS_OUTPUT))
+    print("-" * 40)
+    print("Generating visualizations from transcriptions for test_medium...") 
+    print("-" * 40)
+    visualize_results(str(TRANSCRIPTIONS_OUTPUT / "test_medium"))

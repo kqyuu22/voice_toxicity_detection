@@ -136,6 +136,9 @@ Thumbs.db
 # Project-specific
 outputs/test_*/
 *.wav
+# Don't ignore .wav in outputs/pipeline_results
+!outputs/pipeline_results/*.wav
 *.mp3
 *.zip
 legacy/
+toxic_model/model.safetensors

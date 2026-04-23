@@ -1,6 +1,6 @@
 # Core dependencies
 torch>=2.0.0
-whisper-openai>=20240314
+openai-whisper>=20240314
 numpy>=1.24.0
 scipy>=1.10.0
 librosa>=0.10.0
@@ -10,6 +10,11 @@ noisereduce>=2.0.1
 # Data processing
 pandas>=2.0.0
 matplotlib>=3.7.0
+seaborn>=0.13.0
+scikit-learn>=1.3.0
+datasets>=2.18.0
+transformers>=4.40.0
+accelerate>=0.26.0
 
 # Optional: GPU acceleration (uncomment for CUDA support)
 # torch-cuda>=11.8

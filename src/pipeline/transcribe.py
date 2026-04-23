@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 
 # Add parent directory to path to import config
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from config import OUTPUT_DIRS, ensure_output_dirs, AUDIO_OUTPUT
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from config import ensure_output_dirs, AUDIO_OUTPUT, TRANSCRIPTION_OUTPUT
 
 class SpeechTranscriber:
     def __init__(self, model_size="medium"):
@@ -66,22 +66,24 @@ if __name__ == "__main__":
     ensure_output_dirs()
     test_file = str(AUDIO_OUTPUT)
     if not os.path.exists(test_file):
-        print(f"Warning: {test_file} not found.")
-        print("Run recorder.py first to generate audio.")
+        print(f"Error: {test_file} not found.", file=sys.stderr)
+        print("Run recorder.py first to generate audio.", file=sys.stderr)
+        sys.exit(1)
     else:
         ts = SpeechTranscriber(model_size="medium")
         text = ts.transcribe(test_file, language="en", temperature=0.0, beam_size=5)
+        if not text:
+            with open(TRANSCRIPTION_OUTPUT, "w", encoding="utf-8") as f:
+                f.write("")
+            print("Error: transcription is empty.", file=sys.stderr)
+            sys.exit(1)
         
-        # Get filename without extension
-        filename = Path(test_file).stem
-        output_file = OUTPUT_DIRS["audio"] / f"{filename}_transcription.txt"
-        
-        # Save to file
-        with open(output_file, "w", encoding="utf-8") as f:
+        # Save to the fixed transcript path consumed by Text_classification.py
+        with open(TRANSCRIPTION_OUTPUT, "w", encoding="utf-8") as f:
             f.write(text)
         
         # Print to console
         print("-" * 40)
         print("TRANSCRIPTION:", text)
         print("-" * 40)
-        print(f"Saved to: {output_file}")
+        print(f"Saved to: {TRANSCRIPTION_OUTPUT}")
