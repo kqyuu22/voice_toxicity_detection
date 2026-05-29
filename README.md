@@ -1,60 +1,55 @@
 # Voice Toxicity Detection
 
-This project provides a tool for recording audio locally and analyzing it for toxic content. It aims to automate the transition from spoken word to a toxicity classification label.
+Local audio-to-text-to-toxicity pipeline with Whisper transcription and a multi-label toxic comment classifier. The workflow records speech, transcribes it, and estimates toxicity by segment.
 
 ## Pipeline
 
+Run the full pipeline:
 ```
-python run_pipeline.py        -> Runs threshold check, recording, transcription,
-                              -> and toxicity prediction in order
+python run_pipeline.py
+```
 
-Individual steps:
-1. python src/pipeline/record.py          -> Saves outputs/pipeline_results/recording_output.wav
-2. python src/pipeline/transcribe.py       -> Saves outputs/pipeline_results/recording_output_transcription.txt
-3. python src/pipeline/predict_toxicity.py  -> Predicts toxicity without retraining
-```
+Pipeline steps (individual scripts):
+1. python src/pipeline/record.py           &rarr; outputs/pipeline_results/recording_output.wav
+2. python src/pipeline/transcribe.py       &rarr; outputs/pipeline_results/recording_output_transcription.txt
+3. python src/pipeline/predict_toxicity.py &rarr; toxicity report for latest transcript
+
+If the recorder times out without detecting speech, the pipeline falls back to a dataset transcript
+and skips live transcription. A flag file is written to outputs/pipeline_results/used_dataset_fallback.flag
+so run_pipeline.py can report the source and continue safely.
 
 ## Installation
 
 ```bash
-# Create virtual environment
 python -m venv venv
 venv\Scripts\activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
 ## Project Structure
 
 ```
-test/
-├── README.md
-├── requirements.txt
-├── config.py
-│
+README.md
+requirements.txt
+config.py
+run_pipeline.py
 ├── src/
 │   ├── pipeline/
-│   │   ├── record.py              # Record audio with VAD
-│   │   ├── transcribe.py           # Transcribe audio
-│   │   └── predict_toxicity.py      # Predict toxicity from latest transcript
+│   │   ├── record.py                # Microphone recording with VAD + fallback
+│   │   ├── transcribe.py            # Whisper transcription for the latest recording
+│   │   └── predict_toxicity.py      # Wrapper for model prediction
 │   └── evaluation/
-│       ├── transcriber_test.py      # Test different speech-to-text models
-│       ├── threshold_testing.py     # Test VAD threshold
-│       ├── results_analysis.py      # Analyze WER
-│       └── result_visualization.py  # Generate charts
-│
+│       ├── threshold_testing.py     # Live VAD threshold monitor
+│       ├── transcriber_test.py      # Batch STT model comparison
+│       ├── results_analysis.py      # WER analysis for transcriptions
+│       ├── result_visualization.py  # Confidence/latency charts
+│       └── toxicity_evaluation.py   # Classifier metrics + confusion matrices
 ├── models/
-│   ├── toxic_model/                 # Saved PyTorch classification model files
-│   └── text_classification.py       # Classification model architecture and training script
-│
-├── run_pipeline.py            # Run pipeline steps with one command
-│
+│   ├── text_classification.py       # Training + prediction CLI
+│   └── toxic_model/                 # Saved model and tokenizer (if present)
 ├── data/
-│   ├── raw/10dB/                # Dataset (noizeus), for speech-to-text models
-│   └── reference/               # Ground truth labels
-│
-│
+│   ├── raw/10dB/                     # Audio dataset (NOIZEUS)
+│   └── reference/                    # Ground truth transcripts
 └── outputs/
     ├── pipeline_results/
     └── evaluation/
@@ -65,80 +60,85 @@ test/
 
 ## Quick Start
 
-Run these commands from the project root directory.
+### 1. Prepare the toxicity classifier
 
-### 1. Setup toxic classifier
-
-
-**Option A:**
-Train the toxicity classifier once before using `predict`:
+Option A (train locally):
 ```bash
 python models/text_classification.py train
 ```
 
-**Option B:** 
+Option B (use a pretrained folder):
+1. Download toxic_model/ from Google Drive: https://drive.google.com/drive/folders/1swarH4R_sV-BlQPPcavakTNJbV7EBXHL?usp=drive_link
+2. Place it at models/toxic_model/
 
-1. Manually download the folder `toxic_model/` from this [Google Drive link](https://drive.google.com/drive/folders/1swarH4R_sV-BlQPPcavakTNJbV7EBXHL?usp=drive_link)
+The training script also checks these fallback paths:
+- G:/My Drive/DADN/toxic_model
+- toxic_classifier_model
 
-2. Alternative: Google Drive Desktop (Synced)
+### 2. Run the pipeline
 
-- Install Google Drive for Desktop so your drive appears as a local disk.
-
-- Place the model folder at: G:/My Drive/toxic_model/
-
-### 2. Run the Pipeline
-
-Then run the full audio-to-toxicity pipeline with one command:
 ```bash
 python run_pipeline.py
 ```
 
-By default, this runs `threshold_testing.py` for 5 seconds, then `record.py`, `transcribe.py`, and `predict_toxicity.py`. The recorder step times out after 120 seconds unless `--record-timeout-seconds` is changed. To skip the threshold check:
-```bash
+Useful flags:
+```
 python run_pipeline.py --skip-threshold
+python run_pipeline.py --threshold-seconds 5
+python run_pipeline.py --record-timeout-seconds 120
+python run_pipeline.py --skip-predict
+python run_pipeline.py --predict-threshold 0.5
+python run_pipeline.py --json
 ```
 
-### Recording
+### Manual steps
 
-1. Test VAD threshold (optional):
-   ```bash
-   python src/evaluation/threshold_testing.py
-   ```
-   Adjust `THRESHOLD` in the script based on your environment.
+Record:
+```bash
+python src/evaluation/threshold_testing.py
+python src/pipeline/record.py
+```
 
-2. Record audio:
-   ```bash
-   python src/pipeline/record.py
-   ```
-   Speaks until silence is detected. Saves to `outputs/pipeline_results/recording_output.wav`.
-
-### Transcription
-
-Transcribe the recorded audio before running toxicity prediction:
+Transcribe:
 ```bash
 python src/pipeline/transcribe.py
 ```
-Uses Whisper medium model and always writes the latest transcript to `outputs/pipeline_results/recording_output_transcription.txt`.
 
-### Toxic Text Classification
-
-After `src/pipeline/transcribe.py` has created `outputs/pipeline_results/recording_output_transcription.txt`, classify that transcript without passing any file path:
+Predict toxicity:
 ```bash
-python src\pipeline\predict_toxicity.py
+python src/pipeline/predict_toxicity.py
+python src/pipeline/predict_toxicity.py --file outputs/pipeline_results/recording_output_transcription.txt
 ```
 
-`src\pipeline\predict_toxicity.py` is a wrapper that calls `models\text_classification.py predict` from the project root. `predict` only loads a saved classifier from `models\toxic_model` by default, with legacy fallback path `toxic_classifier_model`; it does not train. If the default transcript file is missing or empty, it exits with a clear message asking you to run `python src\pipeline\transcribe.py` again.
+Prediction notes:
+- The transcript is split by commas and sentence punctuation.
+- A segment is toxic if any label probability is >= the threshold (default 0.5).
+- The final score is toxic_segments / total_segments * 100.
 
-You can still classify a custom text file when needed:
+## Evaluation
+
+Transcriber comparison (tiny/base/small/medium):
 ```bash
-python src\pipeline\predict_toxicity.py --file outputs\pipeline_results\recording_output_transcription.txt
+python src/evaluation/transcriber_test.py
 ```
 
-The classifier splits the transcript by commas and sentence punctuation. A segment is counted as toxic when any toxicity label is at least `0.5`; the final toxicity percentage is `toxic_segments / total_segments * 100`.
+WER analysis for transcription outputs:
+```bash
+python src/evaluation/results_analysis.py
+```
 
+Visualization of confidence/latency:
+```bash
+python src/evaluation/result_visualization.py
+```
 
-## Dataset
+Classifier metrics + confusion matrices:
+```bash
+python src/evaluation/toxicity_evaluation.py
+```
 
-**For Speech-to-text Model**: [NOIZEUS](https://ecs.utdallas.edu/loizou/speech/noizeus/) (developed by Dr. Philip Loizou, UT Dallas). 
+## Datasets
 
-**For Toxic Classification Model**: [Jigsaw Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) dataset (mirrored by [thesofakillers](https://huggingface.co/datasets/thesofakillers/jigsaw-toxic-comment-classification-challenge)).
+- Speech-to-text: NOIZEUS (https://ecs.utdallas.edu/loizou/speech/noizeus/)
+- Toxic classification: Jigsaw Toxic Comment Classification Challenge (https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge)
+- HF mirror: https://huggingface.co/datasets/thesofakillers/jigsaw-toxic-comment-classification-challenge
