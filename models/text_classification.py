@@ -163,10 +163,10 @@ def prepare_datasets(df, tokenizer):
     split.set_format('torch', columns=['input_ids', 'attention_mask', 'labels'])
 
     train_dataset = split['train']
-    val_dataset = split['test']
+    test_dataset = split['test']
 
-    print(f"Train: {len(train_dataset)} | Val: {len(val_dataset)}")
-    return train_dataset, val_dataset
+    print(f"Train: {len(train_dataset)} | Test: {len(test_dataset)}")
+    return train_dataset, test_dataset
 
 
 # ──────────────────────────────────────────────

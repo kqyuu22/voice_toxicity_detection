@@ -44,7 +44,7 @@ class SpeechTranscriber:
 
         print(f"Loading audio via Librosa: {audio_path}")
         
-        # Librosa loads and resamples to 16000Hz automatically
+        # Librosa loads and resamples from our 44100Hz audio to 16000Hz automatically
         audio_array, _ = librosa.load(audio_path, sr=16000)
         
         print(f"Transcribing with {self.model_size} model...")

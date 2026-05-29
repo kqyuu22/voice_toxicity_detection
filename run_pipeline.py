@@ -3,6 +3,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from config import VAD_THRESHOLD_FILE
+
 
 def run_step(name, command, cwd, timeout=None, continue_on_timeout=False):
     print("\n" + "=" * 60)
@@ -93,9 +95,16 @@ def main():
         if not args.skip_threshold and args.threshold_seconds > 0:
             run_step(
                 name="Threshold test",
-                command=[sys.executable, str(evaluation_dir / "threshold_testing.py")],
+                command=[
+                    sys.executable,
+                    str(evaluation_dir / "threshold_testing.py"),
+                    "--duration",
+                    str(args.threshold_seconds),
+                    "--output",
+                    str(VAD_THRESHOLD_FILE),
+                ],
                 cwd=project_root,
-                timeout=args.threshold_seconds,
+                timeout=args.threshold_seconds + 2,
                 continue_on_timeout=True,
             )
 

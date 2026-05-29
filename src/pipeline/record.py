@@ -14,6 +14,8 @@ from config import (
     TRANSCRIPTION_OUTPUT,
     TRANSCRIPTIONS_OUTPUT,
     REFERENCE_FILES,
+    DEFAULT_VAD_THRESHOLD,
+    VAD_THRESHOLD_FILE,
     ensure_output_dirs,
 )
 
@@ -44,21 +46,24 @@ class SingleShotRecorder:
 
     def apply_cleaning(self, audio):
         """Final cleanup station."""
-        # High-pass filter
+        # High-pass filter: cutting frequencies below 100 Hz
         nyq = 0.5 * self.fs
         b, a = butter(5, 100/nyq, btype='high')
         filtered = lfilter(b, a, audio)
         
         # Noise Reduce
-        reduced = nr.reduce_noise(y=filtered, sr=self.fs, stationary=True, prop_decrease=1.0)
+        # subtract the "noise floor" from the audio signal, making the speaker's voice sound much crisper against the background
+        reduced = nr.reduce_noise(y=filtered, sr=self.fs, stationary=True, prop_decrease=0.85)
         
-        # Normalize
+        # Normalize: scale the audio so that the loudest point is at maximum amplitude, ensuring consistent volume across recordings
         peak = np.max(np.abs(reduced))
         if peak > 0:
             reduced = reduced / peak
         return reduced
 
     def stream_callback(self, indata, frames, time, status):
+        # Calculate the volume of the current audio chunk
+        # by taking RMS of the audio samples in that chunk.
         volume = np.linalg.norm(indata) / np.sqrt(len(indata))
         
         if volume > self.threshold:
@@ -80,6 +85,16 @@ class SingleShotRecorder:
                     self.has_finished_recording = True
 
 
+def load_vad_threshold():
+    if not VAD_THRESHOLD_FILE.exists():
+        return DEFAULT_VAD_THRESHOLD
+
+    try:
+        return float(VAD_THRESHOLD_FILE.read_text(encoding="utf-8").strip())
+    except (OSError, ValueError):
+        return DEFAULT_VAD_THRESHOLD
+
+
 def find_dataset_transcript():
     preferred_dirs = [
         TRANSCRIPTIONS_OUTPUT / "test_base",
@@ -91,9 +106,11 @@ def find_dataset_transcript():
         if not folder.exists():
             continue
         for path in sorted(folder.glob("*.txt")):
-            text = path.read_text(encoding="utf-8", errors="ignore").strip()
-            if text:
-                return text, path
+            for line in path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                if line.startswith("TEXT:"):
+                    text = line[len("TEXT:"):].strip()
+                    if text:
+                        return text, path
 
     reference = REFERENCE_FILES.get("ground_truth")
     if reference and reference.exists():
@@ -124,7 +141,8 @@ def write_dataset_fallback(fs):
 
 def main():
     ensure_output_dirs()
-    recorder = SingleShotRecorder(threshold=0.06, silence_limit=2.0)
+    threshold = load_vad_threshold()
+    recorder = SingleShotRecorder(threshold=threshold, silence_limit=2.0)
     fallback_flag = AUDIO_OUTPUT.parent / "used_dataset_fallback.flag"
     if fallback_flag.exists():
         fallback_flag.unlink()

@@ -33,6 +33,10 @@ OUTPUT_DIRS = {
     "analysis": OUTPUT_ROOT / "evaluation" / "analysis",
 }
 
+# Voice activity detection (VAD) defaults
+DEFAULT_VAD_THRESHOLD = 0.05
+VAD_THRESHOLD_FILE = OUTPUT_DIRS["pipeline_results"] / "vad_threshold.txt"
+
 # Reference files
 REFERENCE_FILES = {
     "ground_truth": DATA_ROOT / "reference" / "transcriptions_true.txt",
