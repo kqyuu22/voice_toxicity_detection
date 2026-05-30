@@ -9,6 +9,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from config import ensure_output_dirs, AUDIO_OUTPUT, TRANSCRIPTION_OUTPUT
 
+WHISPER_CACHE_DIR = Path(__file__).resolve().parent.parent.parent / "whisper_cache"
+_WHISPER_MODEL_CACHE = {}
+
 class SpeechTranscriber:
     def __init__(self, model_size="medium"):
         """
@@ -25,7 +28,17 @@ class SpeechTranscriber:
         """
         print(f"Loading Whisper model '{model_size}'...")
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model = whisper.load_model(model_size, device=self.device)
+        WHISPER_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        cache_key = (model_size, self.device)
+        cached_model = _WHISPER_MODEL_CACHE.get(cache_key)
+        if cached_model is None:
+            cached_model = whisper.load_model(
+                model_size,
+                device=self.device,
+                download_root=str(WHISPER_CACHE_DIR),
+            )
+            _WHISPER_MODEL_CACHE[cache_key] = cached_model
+        self.model = cached_model
         print(f"Model loaded on {self.device}.")
         self.model_size = model_size
 
