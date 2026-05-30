@@ -1,1 +1,1 @@
-You both can use the lid on the smooth plank.
+So I'm currently testing our pipeline including recording, constricting, and classifying.
